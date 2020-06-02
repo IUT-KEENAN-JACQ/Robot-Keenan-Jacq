@@ -1,0 +1,34 @@
+﻿<Window x:Class="RobotInterface.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RobotInterface"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox x:Name="Emission" Header="GroupBox" Margin="0" BorderBrush="Black" Background="#FFDDDDDD" Grid.Column="1" Grid.Row="1">
+            <TextBox x:Name="textBoxEmission" Margin="0" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </GroupBox>
+        <GroupBox Header="GroupBox" HorizontalAlignment="Left" Height="5" Margin="220,236,0,0" VerticalAlignment="Top" Width="12"/>
+        <GroupBox x:Name="Réception" Header="GroupBox" Background="#FFDDDDDD" BorderBrush="Black" Grid.Column="3" Margin="0" Grid.Row="1">
+            <TextBox x:Name="textBoxReception" Margin="0" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"/>
+        </GroupBox>
+        <Button x:Name="buttonEnvoyer" Content="Envoyer" Grid.Column="1" HorizontalAlignment="Left" Margin="102,0,0,0" Grid.Row="3" Width="100" Click="buttonEnvoyer_Click" KeyUp="buttonEnvoyer_KeyUp"/>
+
+    </Grid>
+</Window>
