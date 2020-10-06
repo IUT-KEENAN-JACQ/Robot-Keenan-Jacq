@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,40 +13,70 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using ExtendedSerialPort;
 
 namespace RobotInterface
 {
-	/// <summary>
-	/// Logique d'interaction pour MainWindow.xaml
-	/// </summary>
-	public partial class MainWindow : Window
-	{
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
+    public partial class MainWindow : Window
+    {
+        Robot robot = new Robot();
+        string receivedText;
+        DispatcherTimer timerAffichage;
+        private ReliableSerialPort serialPort1;
+        Queue<byte> byteListReceived = new Queue<byte>();
 
-		private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
-		{
-			textBoxReception.Text ="Reçu : " + textBoxEmission.Text + "\n" + textBoxReception.Text;
-			textBoxEmission.Text = null;
+        public MainWindow()
+        {
+            InitializeComponent();
 
-			if (buttonEnvoyer.Background == Brushes.RoyalBlue)
-			{
-				buttonEnvoyer.Background = Brushes.Beige;
-			}
-			else
-				buttonEnvoyer.Background = Brushes.RoyalBlue;
-		}
+            serialPort1 = new ReliableSerialPort("COM5", 115200, Parity.None, 8, StopBits.One);
+            serialPort1.DataReceived += SerialPort1_DataReceived;
+            serialPort1.Open();
 
-		private void buttonEnvoyer_KeyUp(object sender, KeyEventArgs e)
-		{
-			if(e.Key == Key.Enter)
-			{
+            timerAffichage = new DispatcherTimer();
+            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            timerAffichage.Tick += TimerAffichageTick;
+            timerAffichage.Start();
+        }
 
-			}
+        private void TimerAffichageTick(object sender, EventArgs e)
+        {
+            textBoxReception.Text += receivedText;
+            receivedText = null;
+        }
 
-		}
-	}
+        private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
+        {
+            SendMessage();
+        }
+
+        private void SendMessage()
+        {
+            serialPort1.WriteLine(textBoxEmission.Text);
+            textBoxEmission.Text = null;
+        }
+
+        private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
+        {
+            //receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+            //foreach ()
+            //{ }
+        }
+
+        private void buttonClear_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxReception.Text = null;
+        }
+
+        private void buttonTest_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] byteList = new byte[20];
+            for (int i = 0; i < 20; i++)
+            {
+                byteList[i] = (byte)(2 * i);
+            }
+            serialPort1.Write(byteList, 0, byteList.Count());
+        }
+    }
 }
